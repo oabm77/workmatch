@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+{% block titulo %}Academia{% endblock %}
+{% load static %}
+
+{% block estilo %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+{% block contenido %}
+    {% include 'core/menu.html' %}
+   
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="post">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 h3" id="exampleModalLabel">Agregar Registros Académicos</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <section class="container mt-3 row">          
+                        {% csrf_token %}
+                        <div class="mb-3 col-6">
+                            <label for="id_type_degree">Tipo de Educación</label>
+                            {{ form.type_degree }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_academy_name">Institución Educativa</label>
+                            {{ form.academy_name }}
+                        </div>
+                        <div class="mb-3 col-12">
+                            <label for="id_degree_obtained">Grado Obtenido</label>
+                            {{ form.degree_obtained }}
+                        </div>
+                        <div class="mb-3 col-12">
+                            <label for="id_degree_esp">Especialidad del Grado</label>
+                            {{ form.degree_esp }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_start_date">Fecha de Inicio de Estudios</label>
+                            {{ form.start_date }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_finish_date">Fecha de Graduación</label>
+                            {{ form.finish_date }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_in_progress">Aún estudio aquí</label>
+                            {{ form.in_progress }}
+                        </div>
+                    
+                </section>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success">Guardar Estudios</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <button onclick="topFunction()" id="go-top" title="Ir arriba">Ir arriba</button>
+    <section class="container mt-3">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Agregar Estudios
+        </button>
+        <div class="row">
+            {% for item in object_list %}
+                <div class="card border-success mb-3 col-3" >
+                    <div class="card-header bg-transparent border-success">
+                        {{item.type_degree}} 
+                        &nbsp<a href="{% url 'academy-update' pk=item.id %}" title="Modificar"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="#" title="Eliminar" id="delbtn" class="place-top-right" data-bs-toggle="modal" data-bs-target="#academyModal" onclick="changeHref({{ item.id }});"><i class="fa-solid fa-file-circle-xmark text-danger"></i></a>
+                    </div>
+                    <div class="card-body text-success">
+                    <h5 class="card-title">{{ item.academy_name }}</h5>
+                    <p class="card-text">{{ item.degree_obtained }} - {{ item.degree_esp }}</p>
+                    <input type="hidden" id="id-{{ item.id }}" value="{% url 'academy-delete' pk=item.id %}">
+                    </div>
+                    <div class="card-footer bg-transparent text-center border-success">Graduado desde {{ item.finish_date|date:"Y" }} </div>
+                </div>
+            {% empty %}
+                <p class="text-center">Aún no has registrado tus estudiós. Empecemos!!</p>
+            {% endfor %}
+        </div>        
+    </section>
+
+<div class="modal fade" id="academyModal" tabindex="-1" aria-labelledby="academyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="academyModalLabel">Eliminar Estudios</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar este estudio?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="#" id="anchorbtn" class="btn btn-primary">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

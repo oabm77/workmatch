@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+{% block titulo %}Historia Laboral{% endblock %}
+{% load static %}
+
+{% block estilo %}
+{% if object_list %}
+<link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+{% endif %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+{% block contenido %}
+{% include 'core/menu.html' %}
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 h3" id="exampleModalLabel">Agregar historia laboral</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <section class="container mt-3 row">
+                        <div class="mb-3 col-6">
+                            <label for="id_stack">Tecnologias Usadas</label>
+                            {{ form.stack }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_company">Empresa</label>
+                            {{ form.company }}
+                        </div>
+                        <div class="mb-3 col-12">
+                            <label for="id_position">Cargo</label>
+                            {{ form.position }}
+                        </div>
+                        <div class="mb-3 col-12 text-center">
+                            <label for="id_job_description">Funciones Desempeñadas</label><br>
+                            {{ form.job_description }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_start_date">Fecha de Inicio</label>
+                            {{ form.start_date }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_end_date">Fecha de Culminación</label>
+                            {{ form.end_date }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_still_work">Aún trabajo allí</label>
+                            {{ form.still_work }}
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success">Guardar Historia</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<button onclick="topFunction()" id="go-top" title="Ir arriba">Ir arriba</button>
+<section id="timeline-container" class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Agregar Historia Laboral
+            </button>
+        </div>
+    </div>
+    <div id="timeline">
+    {% for item in object_list %}
+        <div class="child">
+            <div class="content">
+                <h4>
+                    <a href="{% url 'history-update' pk=item.id %}" title="Modificar"><i class="fa-solid fa-pen-to-square"></i></a>
+                    {{ item.start_date| date:"Y" }} - 
+                    {% if item.end_date %} 
+                        {{ item.end_date| date:"Y" }}
+                    {% else %}
+                        Actualmente
+                    {% endif %}
+                    &nbsp
+                </h4>
+                <p>{{ item.company }} - {{ item.position }}</p>
+                <p>{{ item.job_description|safe }}</p>
+                <input type="hidden" id="id-{{ item.id }}" value="{% url 'history-delete' pk=item.id %}">
+                <div><a href="#" title="Eliminar" id="delbtn" class="place-top-right" data-bs-toggle="modal" data-bs-target="#historyModal" onclick="changeHref({{ item.id }});"><i class="fa-solid fa-file-circle-xmark text-danger"></i></a></div>
+            </div>
+        </div>
+    {% empty %}
+    <p class="text-center">Aún no has registrado tu historia laboral. Empecemos!!</p>
+    {% endfor %}
+    </div>
+</section>
+
+<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="historyModalLabel">Eliminar historia laboral</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar esta historia laboral?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="#" id="anchorbtn" class="btn btn-primary">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/timeline.js' %}"></script>
+{% endblock %}

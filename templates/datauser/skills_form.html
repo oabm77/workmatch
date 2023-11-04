@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+{% block titulo %}Habilidades{% endblock %}
+{% load static %}
+
+{% block estilo %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+{% block contenido %}
+{% include 'core/menu.html' %}
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 h3" id="exampleModalLabel">Agregar habilidades</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <section class="container mt-3 row">
+                        <div class="mb-3 col-6">
+                            <label for="id_skill">Habilidad</label>
+                            {{ form.skill }}
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="id_level">Nivel</label>
+                            {{ form.level }}
+                        </div>
+                        <div class="mb-3 col-12">
+                            <label for="id_description">Descripción</label>
+                            {{ form.description }}
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success">Guardar Habilidad</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<section class="container mt-3">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Agregar Habilidad
+    </button>
+    <div class="row">
+        {% for item in object_list %}
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ item.skill }}
+                        &nbsp<a href="{% url 'skills-update' pk=item.id %}" title="Modificar"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="#" title="Eliminar" id="delbtn" class="place-top-right" data-bs-toggle="modal" data-bs-target="#skillModal" onclick="changeHref({{ item.id }});"><i class="fa-solid fa-file-circle-xmark text-danger"></i></a>
+                    </h5>
+                    <p class="card-text-scroll-100">{{ item.description }}</p>
+                    <input type="hidden" id="id-{{ item.id }}" value="{% url 'skills-delete' pk=item.id %}">
+                </div>
+                <div class="card-footer">
+                    <small class="text-body-secondary">
+                        Nivel {{ item.level }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">Aún no has registrado tus habilidades. Empecemos!!</p>
+        {% endfor %}
+    </div>
+</section>
+<button onclick="topFunction()" id="go-top" title="Ir arriba">Ir arriba</button>
+<div class="modal fade" id="skillModal" tabindex="-1" aria-labelledby="skillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="skillModalLabel">Eliminar Habilidad</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar esta habilidad?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="#" id="anchorbtn" class="btn btn-primary">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

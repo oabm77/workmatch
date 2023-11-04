@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block titulo %}Stacks{% endblock %}
+{% load static %}
+
+{% block estilo %}
+{% endblock %}
+{% block contenido %}
+{% include 'core/menu.html' %}
+<section class="container mt-3">
+    <div class="card">
+        <div class="card-header">
+            Tecnologías
+        </div>
+        <div class="card-body">
+            <div class="btn-group-toggle" data-toggle="buttons"></div>
+        </div>
+        <div class="card-footer text-end">
+            <button type="submit" class="btn btn-success">Guardar Tecnologías</button>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/stacks.js' %}"></script>
+
+<script>
+  let stacks = [];
+  {% for item in object_list %}
+    stacks.push('{{ item.name_stack }}'); // Adjust this line if you need a separator
+  {% endfor %}
+</script>
+{% endblock %}
