@@ -47,6 +47,12 @@ Recuerde instalar el paquete directamente ejecutando:
 |   Edge    |   103.0.5060.114	
 |   Opera   |   94.0.5222.62	
 |   Brave   |   1.45.115	
+|---|---|
+|Sistema Operativo|Windows, Linux, MacOS|
+|---|---|
+|Procesador|1 Ghz|
+|---|---|
+|Mínimo memoria RAM|4 Gb|
 
 
 ## INSTALLATION
