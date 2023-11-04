@@ -72,7 +72,7 @@ python manage.py runserver
 Los encagados del mantenimiento son :
 
 * Omar Augusto Bautista Mora (https://github.com/oabm77) 
-* WorkMatch Project (https://github.com/viewEder/workmatch)
+* WorkMatch Project (https://github.com/oabm77/workmatch)
 
 Este protecto estuvo bajo la tutoría del personal de View
 
